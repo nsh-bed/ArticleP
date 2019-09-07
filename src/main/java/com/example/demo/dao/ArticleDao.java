@@ -9,5 +9,7 @@ import com.example.demo.dto.Article;
 
 @Mapper
 public interface ArticleDao {
-	List<Article> getArticleList(Map<String, Object> param);
+	public List<Article> getArticleList(Map<String, Object> param);
+	
+	public int getTotalCount(Map<String, Object> param);
 }

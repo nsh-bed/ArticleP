@@ -6,5 +6,6 @@ import java.util.Map;
 import com.example.demo.dto.Article;
 
 public interface ArticleService {
-	List<Article> getArticleList(Map<String, Object> param);
+	public Map<String, Object> getArticleList(Map<String, Object> param);
+	
 }
