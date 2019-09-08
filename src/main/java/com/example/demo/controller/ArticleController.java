@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.dto.Article;
 import com.example.demo.service.ArticleService;
 
 @Controller
@@ -17,7 +18,7 @@ public class ArticleController {
 
 	@RequestMapping("article/list")
 	public String showList(Model model, @RequestParam Map<String, Object> param) {
-		if (param.get("cPage") == null) {
+		if (param.get("cPage") == null || param.get("cPage").equals("")) {
 			param.put("cPage", 1);
 		}
 		
@@ -27,5 +28,13 @@ public class ArticleController {
 		model.addAttribute("page", rs.get("page"));
 
 		return "article/list";
+	}
+	
+	@RequestMapping("article/detail")
+	public String showDetail(Model model, @RequestParam Map<String, Object> param) {
+		Article article = articleService.getOneArticleById(param);
+		model.addAttribute("article", article);
+		
+		return "article/detail";
 	}
 }

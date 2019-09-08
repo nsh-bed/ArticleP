@@ -56,5 +56,9 @@ public class ArticleServiceImpl implements ArticleService {
 		param.put("perPageNum", perPageNum);
 		
 		return rs;
-	} 
+	}
+	
+	public Article getOneArticleById(Map<String, Object> param) {
+		return articleDao.getOneArticleById(param);
+	}
 }

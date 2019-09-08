@@ -1,7 +1,5 @@
 package com.example.demo.dto;
 
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Article {
+public class Member {
 	private int id;
 	private String regDate;
-	private String title;
-	private String body;
-	private int memberId;
-	private int boardId;
-	private int viewId;
-	private Map<String, Object> extra;
+	private String loginId;
+	private String loginPw;
+	private String name;
+	private String email;
+	private String authKey;
+	private boolean emailAuthStatus;
 }

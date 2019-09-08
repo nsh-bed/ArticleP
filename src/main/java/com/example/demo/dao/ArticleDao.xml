@@ -3,33 +3,47 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.dao.ArticleDao">
-	<select id="getArticleList" parameterType="map" resultMap="article">
+	<select id="getArticleList" parameterType="map"
+		resultMap="article">
 		SELECT A.*, IFNULL(M.loginId, '존재하지 않는 사용자') AS writer
 		From article AS A
 		LEFT OUTER JOIN `member` AS M
 		ON M.id = A.memberId
 		WHERE A.boardId = #{boardId}
-		<if test="searchType != null and searchType != '' and searchKeyword != null and searchKeyword != ''">
+		<if
+			test="searchType != null and searchType != '' and searchKeyword != null and searchKeyword != ''">
 			<if test="searchType == 'title'"> AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')</if>
 			<if test="searchType == 'body'"> AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')</if>
-			<if test="searchType == 'writer'"> AND A.loginId LIKE CONCAT('%', #{searchKeyword}, '%')</if>
-		</if> 
+			<if test="searchType == 'writer'"> AND A.loginId LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+		</if>
 		LIMIT #{startNum}, #{perPageNum}
 	</select>
-	
-	<select id="getTotalCount" parameterType="map" resultMap="Integer">
+
+	<select id="getTotalCount" parameterType="map" resultType="Integer">
 		SELECT COUNT(A.id)
 		FROM article AS A
 		LEFT OUTER JOIN `member` AS M
 		ON M.id = A.memberId
-		WHERE A.boardId = #{boardId}
+		WHERE A.boardId = #{boardId}		
 		<if test="searchType != null and searchType != '' and searchKeyword != null and searchKeyword != ''">
 			<if test="searchType == 'title'"> AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')</if>
 			<if test="searchType == 'body'"> AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')</if>
-			<if test="searchType == 'writer'"> AND A.loginId LIKE CONCAT('%', #{searchKeyword}, '%')</if>
-		</if> 
+			<if test="searchType == 'writer'"> AND M.loginId LIKE CONCAT('%', #{searchKeyword}, '%')</if>
+		</if>
 	</select>
-	
+
+	<select id="getOneArticleById" parameterType="map"
+		resultMap="article">
+		SELECT A.*, IFNULL(M.loginId, '존재하지 않는 사용자') AS writer
+		FROM article AS A
+		LEFT OUTER JOIN `member` AS M
+		ON M.id = A.memberId
+		WHERE A.id = #{id} AND
+		A.boardId = #{boardId}
+	</select>
+
+
 	<resultMap type="com.example.demo.dto.Article" id="article">
 		<id property="id" column="id" />
 		<id property="regDate" column="regDate" />

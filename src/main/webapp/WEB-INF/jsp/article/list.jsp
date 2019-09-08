@@ -22,7 +22,7 @@
 </form>
 
 
-<table>
+<table border=1>
 	<tr>
 		<th>번호</th>
 		<th>날짜</th>
@@ -34,7 +34,7 @@
 		<tr>
 			<td>${article.id}</td>
 			<td>${article.regDate}</td>
-			<td>${article.title}</td>
+			<td><a href="/article/detail${url}&id=${article.id}&cPage=${param.cPage}">${article.title}</a></td>
 			<td>${article.extra.writer}</td>
 		</tr>
 	</c:forEach>
@@ -48,7 +48,7 @@
 		<li><a href="/article/list${url}&cPage=${idx}"><c:out
 					value="${idx}"></c:out></a></li>
 	</c:forEach>
-	<c:if test="${page.next }">
+	<c:if test="${page.next}">
 		<li><a
 			href="/article/list${url}&cPage=${page.endPage+1}"></a></li>
 	</c:if>
