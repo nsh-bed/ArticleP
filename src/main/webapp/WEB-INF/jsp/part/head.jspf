@@ -15,6 +15,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="/resource/app.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <title>${title}</title>
 </head>

@@ -43,6 +43,15 @@
 		A.boardId = #{boardId}
 	</select>
 
+	<insert id="addOneArticle" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO article
+		SET regDate = NOW(),
+		title = #{title},
+		body = #{body},
+		boardId = #{boardId},
+		memberId = 1,
+		viewId = 1
+	</insert>
 
 	<resultMap type="com.example.demo.dto.Article" id="article">
 		<id property="id" column="id" />

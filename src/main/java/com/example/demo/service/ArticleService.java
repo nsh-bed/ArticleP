@@ -8,5 +8,7 @@ public interface ArticleService {
 	public Map<String, Object> getArticleList(Map<String, Object> param);
 
 	public Article getOneArticleById(Map<String, Object> param);
+
+	public Map<String, Object> addOneArticle(Map<String, Object> param);
 	
 }
