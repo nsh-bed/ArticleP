@@ -21,7 +21,7 @@ public class ArticleController {
 		if (param.get("cPage") == null || param.get("cPage").equals("")) {
 			param.put("cPage", 1);
 		}
-		
+
 		Map<String, Object> rs = articleService.getArticleList(param);
 
 		model.addAttribute("list", rs.get("list"));
@@ -29,55 +29,60 @@ public class ArticleController {
 
 		return "article/list";
 	}
-	
+
 	@RequestMapping("article/detail")
 	public String showDetail(Model model, @RequestParam Map<String, Object> param) {
 		Article article = articleService.getOneArticleById(param);
 		model.addAttribute("article", article);
-		
+
 		return "article/detail";
 	}
-	
+
 	@RequestMapping("article/add")
 	public String showAdd() {
 		return "article/add";
 	}
-	
+
 	@RequestMapping("article/doAdd")
 	public String addOneArticle(Model model, @RequestParam Map<String, Object> param) {
 		Map<String, Object> rs = articleService.addOneArticle(param);
 		model.addAttribute("msg", rs.get("msg"));
 		String resultCode = (String) rs.get("resultCode");
-		
-		if(resultCode.startsWith("S-")) {
-			String redirectUrl = "/article/detail?id="+param.get("id")+"&boardId="+param.get("boardId");
+
+		if (resultCode.startsWith("S-")) {
+			String redirectUrl = "/article/detail?id=" + param.get("id") + "&boardId=" + param.get("boardId");
 			model.addAttribute("redirectUrl", redirectUrl);
-			
+
 		} else {
 			model.addAttribute("historyBack", true);
 		}
-		
+
 		return "common/redirect";
 	}
-	
+
 	@RequestMapping("article/deleteOneArticle")
 	public String deleteOneArticle(Model model, @RequestParam Map<String, Object> param) {
 		Map<String, Object> rs = articleService.deleteOneArticle(param);
-		
+
 		model.addAttribute("msg", rs.get("msg"));
 		String resultCode = (String) rs.get("resultCode");
-		
-		if(resultCode.startsWith("S-")) {
+
+		if (resultCode.startsWith("S-")) {
 			StringBuffer redirectUrl = new StringBuffer();
 			redirectUrl.append("/article/list?");
-			for(String key : param.keySet()) {
+			for (String key : param.keySet()) {
+				// 삭제한 후 Url을 boardId만 나오게 함. 
+				if (key.equals("id")) { 
+					continue;
+				}
+				
 				redirectUrl.append(key + "=" + param.get(key) + "&");
 			}
 			model.addAttribute("redirectUrl", redirectUrl);
 		} else {
 			model.addAttribute("historyBack", true);
 		}
-		
+
 		return "common/redirect";
 	}
 }
