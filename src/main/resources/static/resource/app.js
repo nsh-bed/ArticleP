@@ -1,4 +1,4 @@
-function addFormSubmited(form) {
+function Article__addFormSubmited(form) {
 	form.title.value = form.title.value.trim();
 	form.body.value = form.body.value.trim();
 	
@@ -25,4 +25,17 @@ function deleteArticleCheck(id, boardId) {
 	}
 	
 	location.href="/article/deleteOneArticle?id="+id+"&boardId="+boardId;
+}
+
+function modifyArticleCheck(id, boardId) {
+	if(!confirm("현재 게시물을 수정하시겠습니까?")) {
+		return;
+	}
+	
+	location.href="/article/modifyArticle?id="+id+"&boardId="+boardId;
+}
+
+
+function Article__ModifyFormSubmited(form) {
+	Article__addFormSubmited(form);
 }

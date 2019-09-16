@@ -96,4 +96,21 @@ public class ArticleServiceImpl implements ArticleService {
 		return Maps.of("msg", msg, "resultCode", resultCode);
 
 	}
+	
+	public Map<String, Object> modifyArticle(Map<String, Object> param) {
+		String msg = "";
+		String resultCode = "";
+		
+		try {
+			articleDao.modifyArticle(param);
+			msg = "게시물 수정 성공";
+			resultCode = "S-1";
+		} catch(Exception e) {
+			msg = "게시물 수정 실패";
+			resultCode = "F-1";
+			e.printStackTrace();
+		}
+		
+		return Maps.of("msg", msg, "resultCode", resultCode);
+	}
 }
