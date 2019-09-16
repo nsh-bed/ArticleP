@@ -53,6 +53,11 @@
 		viewId = 1
 	</insert>
 
+	<delete id="deleteOneArticle" parameterType="map">
+		DELETE FROM article
+		WHERE id = #{id} AND boardId = #{boardId}
+	</delete>
+
 	<resultMap type="com.example.demo.dto.Article" id="article">
 		<id property="id" column="id" />
 		<id property="regDate" column="regDate" />
@@ -60,7 +65,7 @@
 		<id property="body" column="body" />
 		<id property="memberId" column="memberId" />
 		<id property="boardId" column="boardId" />
-		<id property="view" column="view" />
+		<id property="viewId" column="viewId" />
 		<association property="extra" javaType="map">
 			<id property="writer" column="writer" />
 		</association>

@@ -18,3 +18,11 @@ function addFormSubmited(form) {
 	
 	form.submit();
 }
+
+function deleteArticleCheck(id, boardId) {
+	if(!confirm("현재 게시물을 삭제하시겠습니까?")) {
+		return;
+	}
+	
+	location.href="/article/deleteOneArticle?id="+id+"&boardId="+boardId;
+}
