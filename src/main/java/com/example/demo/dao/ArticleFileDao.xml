@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ArticleFileDao">
+	<insert id="addArticleFiles" parameterType="map">
+		INSERT INTO articleFile
+		SET regDate = NOW(),
+		articleId = #{param.id},
+		prefix = #{fileNames[0]},
+		originFileName = #{fileNames[1]},
+		type = #{type},
+		type2 = #{type2}		
+	</insert>
+	
+	<select id="getArticleFiles" parameterType="map" resultMap="articleFile">
+		SELECT *
+		FROM articleFile
+		WHERE articleId = #{id}
+	</select>	
+	
+
+	<resultMap type="com.example.demo.dto.ArticleFile" id="articleFile">
+		<id property="id" column="id"/>
+		<id property="regDate" column="regDate"/>
+		<id property="articleId" column="articleId"/>
+		<id property="prefix" column="prefix"/>
+		<id property="originFileName" column="originFileName"/>
+		<id property="type" column="type"/>
+		<id property="type2" column="type2"/>	
+	</resultMap>
+</mapper> 

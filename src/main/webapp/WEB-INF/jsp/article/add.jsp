@@ -8,7 +8,7 @@
 <a href="/article/list${url}&cPage=${param.cPage}">목록으로</a>
 
 
-<form action="./doAdd" onsubmit="Article__addFormSubmited(this); return false;" method="POST">
+<form action="./doAdd" onsubmit="Article__addFormSubmited(this); return false;" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="boardId" value="${param.boardId }">
 	<div>
 		제목 : <input type="text" autocomplete="off" name="title" placeholder="제목">
@@ -18,6 +18,11 @@
 	</div>
 	<div>
 		<input type="submit" value="작성">
+		<a href="javascript:history.back();">취소</a>
 	</div>
+	<button type="button" onclick="ArticleAdd__addFile('body')">파일 추가하기</button>
+	<div class="ArticleAdd__fileList">
+	
+	</div>	
 </form>
 <%@ include file="../part/foot.jspf"%>
