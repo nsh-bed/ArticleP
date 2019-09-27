@@ -20,19 +20,6 @@
 		LIMIT #{startNum}, #{perPageNum}
 	</select>
 
-	<select id="getTotalCount" parameterType="map" resultType="Integer">
-		SELECT COUNT(A.id)
-		FROM article AS A
-		LEFT OUTER JOIN `member` AS M
-		ON M.id = A.memberId
-		WHERE A.boardId = #{boardId}		
-		<if test="searchType != null and searchType != '' and searchKeyword != null and searchKeyword != ''">
-			<if test="searchType == 'title'"> AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')</if>
-			<if test="searchType == 'body'"> AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')</if>
-			<if test="searchType == 'writer'"> AND M.loginId LIKE CONCAT('%', #{searchKeyword}, '%')</if>
-		</if>
-	</select>
-
 	<select id="getOneArticleById" parameterType="map"
 		resultMap="article">
 		SELECT A.*, IFNULL(M.loginId, '존재하지 않는 사용자') AS writer
@@ -52,6 +39,19 @@
 		memberId = 1,
 		viewId = 1
 	</insert>
+
+	<select id="getTotalCount" parameterType="map" resultType="Integer">
+		SELECT COUNT(A.id)
+		FROM article AS A
+		LEFT OUTER JOIN `member` AS M
+		ON M.id = A.memberId
+		WHERE A.boardId = #{boardId}		
+		<if test="searchType != null and searchType != '' and searchKeyword != null and searchKeyword != ''">
+			<if test="searchType == 'title'"> AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')</if>
+			<if test="searchType == 'body'"> AND A.body LIKE CONCAT('%', #{searchKeyword}, '%')</if>
+			<if test="searchType == 'writer'"> AND M.loginId LIKE CONCAT('%', #{searchKeyword}, '%')</if>
+		</if>
+	</select>
 
 	<delete id="deleteOneArticle" parameterType="map">
 		DELETE FROM article
