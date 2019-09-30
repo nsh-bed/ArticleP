@@ -13,6 +13,15 @@
 		type2 = #{type2}		
 	</insert>
 	
+	<delete id="deleteArticleFiles">
+		DELETE FROM articleFile
+		WHERE id IN
+		<foreach collection="deleteFileIds" item="value" separator=" , " open="(" close=")">
+			#{value}
+		</foreach>
+		AND articleId = #{param.id}
+	</delete>
+	
 	<select id="getArticleAllFiles" parameterType="map" resultMap="articleFile">
 		SELECT *
 		FROM articleFile

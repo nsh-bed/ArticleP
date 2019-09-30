@@ -1,7 +1,7 @@
 custom:
   uploadDir: C:\work\nsh\img
 server:
-  port: 8082  
+  port: 8082 
 mybatis:
   type-aliases-package: com.example.demo.dto
 spring:

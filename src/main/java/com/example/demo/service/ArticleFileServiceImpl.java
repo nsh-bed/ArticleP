@@ -120,4 +120,25 @@ public class ArticleFileServiceImpl implements ArticleFileService {
 			}
 		}
 	}
+	
+	public Map<String, Object> deleteArticleFiles(Map<String, Object> param, List<Integer> deleteFileIds) {
+		String msg = "";
+		String resultCode = "";
+		
+		List<ArticleFile> files = articleFileDao.getArticleFiles(param, deleteFileIds);
+		
+		try {
+			deleteArticleFiles(files);
+			articleFileDao.deleteArticleFiles(param, deleteFileIds);
+			msg = "파일 수정 성공";
+			resultCode = "S-1";
+		} catch(Exception e) {
+			msg = "파일 수정 실패";
+			resultCode = "F-1";
+			e.printStackTrace();
+		}
+		
+		return Maps.of("msg", msg, "resultCode", resultCode);
+		
+	}
 }

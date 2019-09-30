@@ -158,9 +158,23 @@ public class ArticleController {
 	public String doModfiyArticle(Model model, @RequestParam Map<String, Object> param,
 			@RequestParam(value = "modifyFile") List<MultipartFile> modifyFiles,
 			@RequestParam(value = "modifyFileId", required = false) List<Integer> fileIds,
-			@RequestParam(value = "modifyType2", required = false) List<String> modifyTypes2) {
+			@RequestParam(value = "modifyType2", required = false) List<String> modifyTypes2,
+			@RequestParam(value = "delete", required = false) List<Integer> deleteFileIds) {
 		Map<String, Object> rs = null;
 		String resultCode = null;
+		
+		if(deleteFileIds != null && deleteFileIds.size() > 0) {
+			rs = articleFileService.deleteArticleFiles(param, deleteFileIds);
+			
+			model.addAttribute("msg", rs.get("msg"));
+			resultCode = (String) rs.get("resultCode");
+			
+			if(!resultCode.startsWith("S-")) {
+				model.addAttribute("historyBack", true);
+				
+				return "common/redirect";
+			}
+		}
 		
 		if(fileIds != null && fileIds.size() > 0) {
 			
