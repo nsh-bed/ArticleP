@@ -53,3 +53,17 @@ loginPw = 'user1',
 email = 'dnehd15@gmail.com',
 authKey = 'asdsavvxsfsafa',
 emailAuthStatus = '1';
+
+
+
+CREATE TABLE articleFile (
+    id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    articleId INT(10) UNSIGNED NOT NULL,
+    prefix CHAR(200) NOT NULL,
+    originFileName CHAR(200) NOT NULL,
+    `type` CHAR(200) NOT NULL,
+    `type2` CHAR(200) NOT NULL,
+    PRIMARY KEY(id)
+);
+
