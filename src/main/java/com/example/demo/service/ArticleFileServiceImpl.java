@@ -141,4 +141,8 @@ public class ArticleFileServiceImpl implements ArticleFileService {
 		return Maps.of("msg", msg, "resultCode", resultCode);
 		
 	}
+	
+	public ArticleFile getArticleOneFile(Map<String, Object> param) {
+		return articleFileDao.getArticleOneFile(param);
+	}
 }

@@ -21,7 +21,7 @@
 		<a href="javascript:history.back();">취소</a>
 	</div>
 	<button type="button" onclick="ArticleAdd__addFile('body')">파일 추가하기</button>
-	<div class="ArticleAdd__fileList">
+	<div class="fileList">
 	
 	</div>	
 </form>

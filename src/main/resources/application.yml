@@ -1,10 +1,13 @@
 custom:
   uploadDir: C:\work\nsh\img
 server:
-  port: 8082 
+  port: 8082  
 mybatis:
   type-aliases-package: com.example.demo.dto
 spring:
+  http:^|M    encoding:^|M      charset: UTF-8
+      enabled:true
+      force:true
   mvc:
     view:
       prefix: /WEB-INF/jsp/

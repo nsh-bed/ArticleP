@@ -37,6 +37,12 @@
 		AND articleId = #{param.id}
 	</select>
 	
+	<select id="getArticleOneFile" parameterType="map" resultMap="articleFile">
+		SELECT *
+		FROM articleFile
+		WHERE id = #{id}
+	</select>	
+	
 	<update id="modifyArticleFiles">
 		UPDATE articleFile
 		SET regDate = NOW(),		

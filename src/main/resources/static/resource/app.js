@@ -88,7 +88,7 @@ function ArticleAdd__addFile(locationType) {
 	
 	container.append(file, button, type, type2);
 
-	$(".ArticleAdd__fileList").append(container);
+	$(".fileList").append(container);
 }
 
 function ArticleModify__check(btn){
@@ -108,5 +108,9 @@ function ArticleModify__check(btn){
 		}
 		
 		$(btn).siblings("input[type='checkbox']").attr("disabled" ,false);
+	}
+	
+	function ArticleModify__addFile(locationType){
+		ArticleAdd__addFile(locationType);
 	}
 }

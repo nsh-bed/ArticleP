@@ -6,6 +6,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -159,9 +161,13 @@ public class ArticleController {
 			@RequestParam(value = "modifyFile") List<MultipartFile> modifyFiles,
 			@RequestParam(value = "modifyFileId", required = false) List<Integer> fileIds,
 			@RequestParam(value = "modifyType2", required = false) List<String> modifyTypes2,
-			@RequestParam(value = "delete", required = false) List<Integer> deleteFileIds) {
+			@RequestParam(value = "delete", required = false) List<Integer> deleteFileIds,
+			@RequestParam(value = "addFiles") List<MultipartFile> files,
+			@RequestParam(value = "type", required = false) List<String> types,
+			@RequestParam(value = "type2", required = false) List<String> types2){
 		Map<String, Object> rs = null;
 		String resultCode = null;
+		
 		
 		if(deleteFileIds != null && deleteFileIds.size() > 0) {
 			rs = articleFileService.deleteArticleFiles(param, deleteFileIds);
@@ -190,6 +196,18 @@ public class ArticleController {
 				return "common/redirect";
 			}
 		}		
+		
+		if(files != null && files.size() > 0 ) {
+			rs = articleFileService.addArticleFiles(param, files, types, types2);
+			model.addAttribute("msg", rs.get("msg"));
+			resultCode = (String) rs.get("resultCode");
+			
+			if(!resultCode.startsWith("S-")) {
+				model.addAttribute("historyBack", true);
+				
+				return "common/redirect";
+			}
+		}
 			
 		rs = articleService.modifyArticle(param);
 
@@ -212,7 +230,9 @@ public class ArticleController {
 	@RequestMapping("article/downloadImg")
 	@ResponseBody
 	public ResponseEntity<Resource> downloadImg(@RequestParam Map<String, Object> param){
-		File target = new File(uploadDir, (String)param.get("fileName"));		
+		ArticleFile file = articleFileService.getArticleOneFile(param);
+		
+		File target = new File(uploadDir, file.getPrefix() + file.getOriginFileName());		
 		HttpHeaders header = new HttpHeaders();		
 		Resource rs = null;
 		
@@ -224,12 +244,13 @@ public class ArticleController {
 					mimeType = "octet-stream";
 				}
 				
-				rs = new UrlResource(Paths.get(target.getAbsolutePath()).toUri());
+				rs = new UrlResource(target.toURI());
 				
-				header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+ rs.getFilename() +"\"");				
+				header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+ rs.getFilename() +"\"");
+				header.setCacheControl("no-cache");
 				header.setContentType(MediaType.parseMediaType(mimeType));
 				
-			}catch(Exception e) {
+			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -239,9 +260,10 @@ public class ArticleController {
 
 	@RequestMapping("article/showImg")
 	@ResponseBody
-	public ResponseEntity<Resource> showImg(@RequestParam Map<String, Object> param){
+	public ResponseEntity<Resource> showImg(@RequestParam Map<String, Object> param, HttpServletRequest request){
+		ArticleFile file = articleFileService.getArticleOneFile(param);
 		
-		File target = new File(uploadDir, (String)param.get("fileName"));		
+		File target = new File(uploadDir, file.getPrefix() + file.getOriginFileName());
 		HttpHeaders header = new HttpHeaders();		
 		Resource rs = null;
 		
@@ -253,7 +275,7 @@ public class ArticleController {
 					mimeType = "octet-stream";
 				}
 				
-				rs = new UrlResource(Paths.get(target.getAbsolutePath()).toUri());				
+				rs = new UrlResource(target.toURI());				
 								
 				header.setContentType(MediaType.parseMediaType(mimeType));
 				
