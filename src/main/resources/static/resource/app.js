@@ -1,3 +1,18 @@
+function checkEmpty(input) {
+	input.value = input.value.trim();
+	if(input.value.length == 0) {
+		return false;
+	}
+	
+	return true;
+}
+
+function checkEmailPattern(input) {
+	var pattern = /\w+@\w+\.\w+\.?\w*/;
+	return pattern.test(input.value);
+}
+
+
 function Article__addFormSubmited(form) {
 	form.title.value = form.title.value.trim();
 	form.body.value = form.body.value.trim();
@@ -113,4 +128,82 @@ function ArticleModify__check(btn){
 	function ArticleModify__addFile(locationType){
 		ArticleAdd__addFile(locationType);
 	}
+}
+
+var checkId = false;
+var checkEmail = false;
+function MemberJoin__checkForm(form) {
+	
+	if(!checkEmpty(form.loginId) || !checkEmpty(form.loginPw)) || !checkEmpty(form.name) || !checkEmpty(form.email)) {
+		alert('필수항목들을 입력해주세요.');
+		
+		return false;
+	}
+	
+	if(!checkEmailPattern(form.email)){
+		alert('이메일 형식에 맞지 않습니다.');
+		
+		return false;
+	}
+	
+	if(!checkId || !checkEmail){
+		alert('중복체크를 완료해주세요.');
+		
+		return false;
+	}
+
+	form.submit();
+}
+
+function MemberJoin__loginIdCheck(btn) {
+	$(btn).prev().find("input").val($(btn).prev().find("input").val().trim());
+	var loginId = $(btn).prev().find("input").val();
+	if(loginId.length == 0){
+		alert("아이디를 입력해주세요");
+		
+		return false;
+	}
+	
+	$.get("/member/loginIdCheck",
+			{
+				loginId : loginId
+			},
+			function(data){
+				$(btn).next().html(data.msg);
+				if(data.success){
+					checkId = true;
+				}
+			},
+			"json"
+		);
+}
+	
+function MemberJoin__emailCheck(btn){
+	$(btn).prev().find("input").val($(btn).prev().find("input").val().trim());
+	var email = $(btn).prev().find("input").val();
+	if(email.length == 0){
+		alert("이메일을 입력해주세요");
+		return ;
+	}
+
+	$.get("/member/emailCheck",
+		{
+			email : email
+		},
+		function(data){
+			$(btn).next().html(data.msg);
+			if(data.success){
+				checkEmail = true;
+			}
+		},
+		"json"
+	);
+}
+
+function MemberJoin__resetEmail(){	
+	checkEmail = false;
+}
+
+function MemberJoin__resetLoginId(){	
+	checkId = false;
 }

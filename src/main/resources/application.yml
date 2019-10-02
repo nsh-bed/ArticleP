@@ -1,5 +1,5 @@
 custom:
-  uploadDir: C:\work\nsh\img
+  uploadDir: C:\work\img
 server:
   port: 8082  
 mybatis:

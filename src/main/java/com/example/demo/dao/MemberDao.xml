@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.MemberDao">
+	<insert id="addMember" parameterType="map">
+		INSERT INTO `member`
+		SET regDate = NOW(),
+		loginId = #{loginId},
+		loginPw = #{loginPw},
+		name = #{name},
+		email = #{email},
+		authKey = '555555'
+		emailAuthStatus = '0';
+	</insert>
+	
+	<select id="checkEmail" parameterType="map" resultType="Integer">
+		SELECT COUNT(id) FROM `member`
+		WHERE email = #{email}
+	</select>
+
+	<select id="checkLoginId" parameterType="map" resultType="Integer">
+		SELECT COUNT(id) FROM `member`
+		WHERE loginId = #{loginId}
+	</select>
+	
+	<resultMap type="com.example.demo.dto.Member" id="member">
+		<id property="id" column="id" />
+		<id property="regDate" column="regDate" />
+		<id property="loginId" column="loginId" />
+		<id property="loginPw" column="loginPw" />
+		<id property="name" column="name" />
+		<id property="email" column="email" />
+		<id property="authKey" column="authKey" />
+		<id property="emailAuthStatus" column="emailAuthStatus" />
+	</resultMap>
+</mapper> 
