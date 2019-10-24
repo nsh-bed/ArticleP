@@ -38,8 +38,8 @@ CREATE TABLE `member` (
     loginId CHAR(10) NOT NULL,
     loginPw VARCHAR(10) NOT NULL,
     `name` CHAR(10) NOT NULL,
-    email CHAR(10) NOT NULL,
-    authKey CHAR(10) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    authKey VARCHAR(60) NOT NULL,
     emailAuthStatus TINYINT(1) UNSIGNED NOT NULL,
     PRIMARY KEY(id)
 );
@@ -50,7 +50,7 @@ SET regDate = NOW(),
 loginId = 'user1',
 loginPw = 'user1',
 `name` = '홍길동',
-email = 'dnehd15@gmail.com',
+email = 'bed.nsh.web@gmail.com',
 authKey = 'asdsavvxsfsafa',
 emailAuthStatus = '1';
 
