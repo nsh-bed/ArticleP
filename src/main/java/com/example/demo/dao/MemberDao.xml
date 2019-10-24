@@ -10,8 +10,8 @@
 		loginPw = #{loginPw},
 		name = #{name},
 		email = #{email},
-		authKey = '555555'
-		emailAuthStatus = '0';
+		authKey = #{authKey},
+		emailAuthStatus = '0'
 	</insert>
 	
 	<select id="checkEmail" parameterType="map" resultType="Integer">
@@ -23,6 +23,18 @@
 		SELECT COUNT(id) FROM `member`
 		WHERE loginId = #{loginId}
 	</select>
+	
+	<select id="getOneMemberByAuthKeyEmail" parameterType="map" resultType="Integer">
+		SELECT COUNT(*)
+		FROM `member`
+		WHERE email = #{email} AND authKey = #{authKey}
+	</select>
+	
+	<update id="memberEmailAuth" parameterType="map">
+		UPDATE `member`
+		SET emailAuthStatus = '1'
+		WHERE email = #{email} AND authKey = #{authKey}
+	</update>
 	
 	<resultMap type="com.example.demo.dto.Member" id="member">
 		<id property="id" column="id" />

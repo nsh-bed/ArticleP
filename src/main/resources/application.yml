@@ -14,7 +14,7 @@ spring:
       suffix: .jsp
   datasource:
     username: root
-    password: ''
+    password: 'sbs123414'
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     url: jdbc:log4jdbc:mysql://127.0.0.1:3306/a1?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
   servlet:
@@ -25,8 +25,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ''
-    password: ''
+    username: 'dnehd15@gmail.com'
+    password: '!!!skatjdgus1'
     properties:
       mail:
         smtp:

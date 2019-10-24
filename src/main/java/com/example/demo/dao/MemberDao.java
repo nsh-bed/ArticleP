@@ -13,4 +13,8 @@ public interface MemberDao {
 
 	public int checkLoginId(Map<String, Object> param);
 
+	public int getOneMemberByAuthKeyEmail(Map<String, Object> param);
+
+	public void memberEmailAuth(Map<String, Object> param);
+
 }

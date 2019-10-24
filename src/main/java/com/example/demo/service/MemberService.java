@@ -9,5 +9,7 @@ public interface MemberService {
 	public Map<String, Object> checkEmail(Map<String, Object> param);
 
 	public Map<String, Object> checkLoginId(Map<String, Object> param);
+
+	public Map<String, Object> memberEmailAuth(Map<String, Object> param);
 	
 }

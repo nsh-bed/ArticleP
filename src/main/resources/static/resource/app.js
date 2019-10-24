@@ -134,7 +134,7 @@ var checkId = false;
 var checkEmail = false;
 function MemberJoin__checkForm(form) {
 	
-	if(!checkEmpty(form.loginId) || !checkEmpty(form.loginPw)) || !checkEmpty(form.name) || !checkEmpty(form.email)) {
+	if( !checkEmpty(form.loginId) || !checkEmpty(form.loginPw) || !checkEmpty(form.name) || !checkEmpty(form.email) ) {
 		alert('필수항목들을 입력해주세요.');
 		
 		return false;
