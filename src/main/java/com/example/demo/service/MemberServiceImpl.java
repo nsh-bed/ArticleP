@@ -143,6 +143,10 @@ public class MemberServiceImpl implements MemberService {
 			resultCode = "F-1";
 		}
 		
-		return Maps.of("msg", msg, "resultCode", resultCode, "member", member);
+		return Maps.of("msg", msg, "resultCode", resultCode, "loginedMemberId", member.getId());
+	}
+	
+	public Member getOneMemberById(int loginedMemberId) {
+		return memberDao.getOneMemberById(loginedMemberId);
 	}
 }

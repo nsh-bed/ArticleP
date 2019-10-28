@@ -36,7 +36,7 @@ CREATE TABLE `member` (
     id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     regDate DATETIME NOT NULL,
     loginId CHAR(10) NOT NULL,
-    loginPw VARCHAR(10) NOT NULL,
+    loginPw VARCHAR(60) NOT NULL,
     `name` CHAR(10) NOT NULL,
     email VARCHAR(50) NOT NULL,
     authKey VARCHAR(60) NOT NULL,

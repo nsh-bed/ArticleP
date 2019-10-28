@@ -21,4 +21,6 @@ public interface MemberDao {
 
 	public Member getOneMemberByIdAndPw(Map<String, Object> param);
 
+	public Member getOneMemberById(int loginedMemberId);
+
 }

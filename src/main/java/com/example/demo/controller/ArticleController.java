@@ -67,8 +67,7 @@ public class ArticleController {
 
 	@RequestMapping("article/add")
 	public String showAdd() {
-		
-		
+
 		return "article/add";
 	}
 
@@ -112,19 +111,19 @@ public class ArticleController {
 	@RequestMapping("article/deleteOneArticle")
 	public String deleteOneArticle(Model model, @RequestParam Map<String, Object> param) {
 		Map<String, Object> rs = articleFileService.deleteOneArticleAllFiles(param);
-	
+
 		String resultCode = (String) rs.get("resultCode");
-		
-		if(!resultCode.startsWith("S-")) {
+
+		if (!resultCode.startsWith("S-")) {
 			model.addAttribute("msg", rs.get("msg"));
 			model.addAttribute("historyBack", true);
 			return "common/redirect";
 		}
-		
+
 		rs = articleService.deleteOneArticle(param);
 		model.addAttribute("msg", rs.get("msg"));
 		resultCode = (String) rs.get("resultCode");
-		
+
 		if (resultCode.startsWith("S-")) {
 			StringBuffer redirectUrl = new StringBuffer();
 			redirectUrl.append("/article/list?");
@@ -152,7 +151,6 @@ public class ArticleController {
 		model.addAttribute("article", article);
 		model.addAttribute("files", files);
 
-	
 		return "article/modify";
 	}
 
@@ -164,127 +162,124 @@ public class ArticleController {
 			@RequestParam(value = "delete", required = false) List<Integer> deleteFileIds,
 			@RequestParam(value = "addFiles") List<MultipartFile> files,
 			@RequestParam(value = "type", required = false) List<String> types,
-			@RequestParam(value = "type2", required = false) List<String> types2){
+			@RequestParam(value = "type2", required = false) List<String> types2) {
 		Map<String, Object> rs = null;
 		String resultCode = null;
-		
-		
-		if(deleteFileIds != null && deleteFileIds.size() > 0) {
+
+		if (deleteFileIds != null && deleteFileIds.size() > 0) {
 			rs = articleFileService.deleteArticleFiles(param, deleteFileIds);
-			
+
 			model.addAttribute("msg", rs.get("msg"));
 			resultCode = (String) rs.get("resultCode");
-			
-			if(!resultCode.startsWith("S-")) {
+
+			if (!resultCode.startsWith("S-")) {
 				model.addAttribute("historyBack", true);
-				
+
 				return "common/redirect";
 			}
 		}
-		
-		if(fileIds != null && fileIds.size() > 0) {
-			
-			rs = articleFileService.modifyArticleFiles(param, modifyFiles, fileIds, modifyTypes2);			
-			
-			model.addAttribute("msg", rs.get("msg"));			
-			resultCode = (String) rs.get("resultCode");	
-		
-			if(!resultCode.startsWith("S-")) {
-				
+
+		if (fileIds != null && fileIds.size() > 0) {
+
+			rs = articleFileService.modifyArticleFiles(param, modifyFiles, fileIds, modifyTypes2);
+
+			model.addAttribute("msg", rs.get("msg"));
+			resultCode = (String) rs.get("resultCode");
+
+			if (!resultCode.startsWith("S-")) {
+
 				model.addAttribute("historyBack", true);
-								
+
 				return "common/redirect";
 			}
-		}		
-		
-		if(files != null && files.size() > 0 ) {
+		}
+
+		if (files != null && files.size() > 0) {
 			rs = articleFileService.addArticleFiles(param, files, types, types2);
 			model.addAttribute("msg", rs.get("msg"));
 			resultCode = (String) rs.get("resultCode");
-			
-			if(!resultCode.startsWith("S-")) {
+
+			if (!resultCode.startsWith("S-")) {
 				model.addAttribute("historyBack", true);
-				
+
 				return "common/redirect";
 			}
 		}
-			
+
 		rs = articleService.modifyArticle(param);
 
-		
 		model.addAttribute("msg", rs.get("msg"));
 		resultCode = (String) rs.get("resultCode");
 
+		if (resultCode.startsWith("S-")) {
+			String redirectUrl = "/article/detail?id=" + param.get("id") + "&boardId=" + param.get("boardId");
 
-		if(resultCode.startsWith("S-")) {
-			String redirectUrl = "/article/detail?id="+param.get("id")+"&boardId="+param.get("boardId");			
-			
 			model.addAttribute("redirectUrl", redirectUrl);
 		} else {
 			model.addAttribute("historyBack", true);
 		}
-		
+
 		return "common/redirect";
 	}
 
 	@RequestMapping("article/downloadImg")
 	@ResponseBody
-	public ResponseEntity<Resource> downloadImg(@RequestParam Map<String, Object> param){
+	public ResponseEntity<Resource> downloadImg(@RequestParam Map<String, Object> param) {
 		ArticleFile file = articleFileService.getArticleOneFile(param);
-		
-		File target = new File(uploadDir, file.getPrefix() + file.getOriginFileName());		
-		HttpHeaders header = new HttpHeaders();		
+
+		File target = new File(uploadDir, file.getPrefix() + file.getOriginFileName());
+		HttpHeaders header = new HttpHeaders();
 		Resource rs = null;
-		
-		if(target.exists()) {
-			try {				
-				String mimeType = Files.probeContentType(Paths.get(target.getAbsolutePath()));			
-				
-				if(mimeType == null) {
+
+		if (target.exists()) {
+			try {
+				String mimeType = Files.probeContentType(Paths.get(target.getAbsolutePath()));
+
+				if (mimeType == null) {
 					mimeType = "octet-stream";
 				}
-				
+
 				rs = new UrlResource(target.toURI());
-				
-				header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+ rs.getFilename() +"\"");
+
+				header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + rs.getFilename() + "\"");
 				header.setCacheControl("no-cache");
 				header.setContentType(MediaType.parseMediaType(mimeType));
-				
-			} catch(Exception e) {
+
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return new ResponseEntity<Resource>(rs, header, HttpStatus.OK);
 	}
 
 	@RequestMapping("article/showImg")
 	@ResponseBody
-	public ResponseEntity<Resource> showImg(@RequestParam Map<String, Object> param, HttpServletRequest request){
+	public ResponseEntity<Resource> showImg(@RequestParam Map<String, Object> param, HttpServletRequest request) {
 		ArticleFile file = articleFileService.getArticleOneFile(param);
-		
+
 		File target = new File(uploadDir, file.getPrefix() + file.getOriginFileName());
-		HttpHeaders header = new HttpHeaders();		
+		HttpHeaders header = new HttpHeaders();
 		Resource rs = null;
-		
-		if(target.exists()) {
-			try {				
-				String mimeType = Files.probeContentType(Paths.get(target.getAbsolutePath()));			
-				
-				if(mimeType == null) {
+
+		if (target.exists()) {
+			try {
+				String mimeType = Files.probeContentType(Paths.get(target.getAbsolutePath()));
+
+				if (mimeType == null) {
 					mimeType = "octet-stream";
 				}
-				
-				rs = new UrlResource(target.toURI());				
-								
+
+				rs = new UrlResource(target.toURI());
+
 				header.setContentType(MediaType.parseMediaType(mimeType));
-				
-			}catch(Exception e) {
+
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return new ResponseEntity<Resource>(rs, header, HttpStatus.OK);
 	}
-	
+
 }

@@ -27,7 +27,7 @@
 	<button type="button" onclick="ArticleAdd__addFile('body')">파일 추가하기</button>
 	<c:forEach items="${files}" var="file">
 		<div>
-			<img src="/article/showImg?fileName=${file.prefix }${file.originFileName}"><br>
+			<img src="/article/showImg?id=${file.id}"><br>
 			
 				삭제하기 : <input class="delete" type="checkbox" name="delete"
 					value="${file.id}" onclick="ArticleModify__check(this);" />

@@ -23,41 +23,40 @@ import jline.internal.Log;
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
-	
+
 	@RequestMapping("member/join")
 	public String join() {
 		return "member/join";
 	}
-	
+
 	@RequestMapping("member/doJoin")
 	public String doJoin(Model model, @RequestParam Map<String, Object> param) {
 		Map<String, Object> rs = memberService.addMember(param);
-		
+
 		model.addAttribute("msg", rs.get("msg"));
 		String resultCode = (String) rs.get("resultCode");
-		
-		
-		if(resultCode.startsWith("S-")) {
+
+		if (resultCode.startsWith("S-")) {
 			String redirectUrl = "/";
-			
+
 			model.addAttribute("redirectUrl", redirectUrl);
 		} else {
 			model.addAttribute("historyBack", true);
 		}
-		
+
 		return "common/redirect";
 	}
-	
+
 	@RequestMapping("member/emailCheck")
 	@ResponseBody
-	public Map<String, Object> emailCheck(@RequestParam Map<String, Object> param){
+	public Map<String, Object> emailCheck(@RequestParam Map<String, Object> param) {
 		Map<String, Object> rs = memberService.checkEmail(param);
 
 		String resultCode = (String) rs.get("resultCode");
 
-		if(resultCode.startsWith("S-")) {			
+		if (resultCode.startsWith("S-")) {
 			return Maps.of("msg", rs.get("msg"), "success", true);
-		}else {
+		} else {
 			return Maps.of("msg", rs.get("msg"), "success", false);
 		}
 
@@ -65,61 +64,59 @@ public class MemberController {
 
 	@RequestMapping("member/loginIdCheck")
 	@ResponseBody
-	public Map<String, Object> loginIdCheck(@RequestParam Map<String, Object> param){
-		Map<String, Object> rs = memberService.checkLoginId(param);		
+	public Map<String, Object> loginIdCheck(@RequestParam Map<String, Object> param) {
+		Map<String, Object> rs = memberService.checkLoginId(param);
 
 		String resultCode = (String) rs.get("resultCode");
 
-		if(resultCode.startsWith("S-")) {			
+		if (resultCode.startsWith("S-")) {
 			return Maps.of("msg", rs.get("msg"), "success", true);
-		}else {
+		} else {
 			return Maps.of("msg", rs.get("msg"), "success", false);
-		}		
+		}
 
 	}
-	
+
 	@RequestMapping("member/auth")
 	public String auth(Model model, @RequestParam Map<String, Object> param) {
 		Map<String, Object> rs = memberService.memberEmailAuth(param);
 		model.addAttribute("msg", rs.get("msg"));
 		model.addAttribute("redirectUrl", "/");
-		
+
 		return "common/redirect";
 	}
-	
+
 	@RequestMapping("member/login")
 	public String login() {
-		
+
 		return "member/login";
 	}
 
-	
 	@RequestMapping("member/doLogin")
 	public String doLogin(Model model, @RequestParam Map<String, Object> param, HttpSession session) {
 		Map<String, Object> rs = memberService.checkMember(param);
-		
+
 		model.addAttribute("msg", rs.get("msg"));
 		String resultCode = (String) rs.get("resultCode");
-		
-		if(resultCode.startsWith("S-")) {
-			
+
+		if (resultCode.startsWith("S-")) {
+
 			String redirectUrl = "/";
-			
+
 			model.addAttribute("redirectUrl", redirectUrl);
-			session.setAttribute("member", (Member) rs.get("member"));
-			
+			session.setAttribute("loginedMemberId", (int) rs.get("loginedMemberId"));
+
 		} else {
 			model.addAttribute("historyBack", true);
 		}
-		
-		
+
 		return "common/redirect";
 	}
-	
+
 	@RequestMapping("member/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("member");
-		
+		session.removeAttribute("loginedMemberId");
+
 		return "redirect:/";
 	}
 }
