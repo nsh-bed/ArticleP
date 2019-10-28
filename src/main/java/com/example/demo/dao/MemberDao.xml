@@ -36,6 +36,13 @@
 		WHERE email = #{email} AND authKey = #{authKey}
 	</update>
 	
+	<select id="getOneMemberByIdAndPw" parameterType="map" resultMap="member">
+		SELECT *
+		FROM `member`
+		WHERE loginId = #{loginId} AND loginPw = #{loginPw}
+	</select>
+	
+	
 	<resultMap type="com.example.demo.dto.Member" id="member">
 		<id property="id" column="id" />
 		<id property="regDate" column="regDate" />

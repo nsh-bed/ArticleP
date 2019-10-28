@@ -7,6 +7,13 @@ function checkEmpty(input) {
 	return true;
 }
 
+function encodeSHA1(value){
+	var hash = CryptoJS.SHA1(value);
+	var result = CryptoJS.enc.Hex.stringify(hash);
+	
+	return result;
+}
+
 function checkEmailPattern(input) {
 	var pattern = /\w+@\w+\.\w+\.?\w*/;
 	return pattern.test(input.value);
@@ -134,7 +141,7 @@ var checkId = false;
 var checkEmail = false;
 function MemberJoin__checkForm(form) {
 	
-	if( !checkEmpty(form.loginId) || !checkEmpty(form.loginPw) || !checkEmpty(form.name) || !checkEmpty(form.email) ) {
+	if( !checkEmpty(form.loginId) || !checkEmpty(form.temp_loginPw) || !checkEmpty(form.name) || !checkEmpty(form.email) ) {
 		alert('필수항목들을 입력해주세요.');
 		
 		return false;
@@ -152,6 +159,12 @@ function MemberJoin__checkForm(form) {
 		return false;
 	}
 
+	form.loginPw.value = encodeSHA1(form.temp_loginPw);
+	$(form).find("button").attr("disabled", true);
+	$(form).hide();
+	$(".statusMsg").html("회원가입 중......");
+
+	
 	form.submit();
 }
 
@@ -181,8 +194,14 @@ function MemberJoin__loginIdCheck(btn) {
 function MemberJoin__emailCheck(btn){
 	$(btn).prev().find("input").val($(btn).prev().find("input").val().trim());
 	var email = $(btn).prev().find("input").val();
-	if(email.length == 0){
-		alert("이메일을 입력해주세요");
+	
+	var pattern = /\w+@\w+\.\w+\.?\w*/;
+	
+	if(!pattern.test(email)) {
+		
+		alert("이메일 형식에 맞지 않습니다.");
+		
+		
 		return ;
 	}
 
@@ -200,10 +219,25 @@ function MemberJoin__emailCheck(btn){
 	);
 }
 
+
+
+
 function MemberJoin__resetEmail(){	
 	checkEmail = false;
 }
 
 function MemberJoin__resetLoginId(){	
 	checkId = false;
+}
+
+function MemberLogin__checkForm(form) {
+	if(!checkEmpty(form.loginId) || !checkEmpty(form.temp_loginPw)) {
+		alert("빈칸없이 채워주세요.");
+		return ;
+	}
+	
+	form.loginPw.value = encodeSHA1(form.temp_loginPw);
+	
+	form.submit();
+	
 }

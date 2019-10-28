@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.demo.dto.Member;
+
 @Mapper
 public interface MemberDao {
 
@@ -16,5 +18,7 @@ public interface MemberDao {
 	public int getOneMemberByAuthKeyEmail(Map<String, Object> param);
 
 	public void memberEmailAuth(Map<String, Object> param);
+
+	public Member getOneMemberByIdAndPw(Map<String, Object> param);
 
 }
