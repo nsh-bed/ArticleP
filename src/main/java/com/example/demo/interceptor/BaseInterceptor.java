@@ -43,6 +43,8 @@ public class BaseInterceptor implements HandlerInterceptor {
 			request.setAttribute("loginedMember", null);
 		}
 		
+		
+		
 		return HandlerInterceptor.super.preHandle(request, response, handler);
 		
 	}
