@@ -48,7 +48,7 @@ CREATE TABLE `member` (
 INSERT INTO `member`
 SET regDate = NOW(),
 loginId = 'user1',
-loginPw = 'user1',
+loginPw = SHA1('user1'),
 `name` = '홍길동',
 email = 'bed.nsh.web@gmail.com',
 authKey = 'asdsavvxsfsafa',
@@ -66,4 +66,3 @@ CREATE TABLE articleFile (
     `type2` CHAR(200) NOT NULL,
     PRIMARY KEY(id)
 );
-
