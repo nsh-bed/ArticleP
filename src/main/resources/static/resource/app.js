@@ -159,7 +159,7 @@ function MemberJoin__checkForm(form) {
 		return false;
 	}
 
-	form.loginPw.value = encodeSHA1(form.temp_loginPw);
+	form.loginPw.value = encodeSHA1(form.temp_loginPw.value);
 	$(form).find("button").attr("disabled", true);
 	$(form).hide();
 	$(".statusMsg").html("회원가입 중......");
@@ -236,7 +236,7 @@ function MemberLogin__checkForm(form) {
 		return ;
 	}
 	
-	form.loginPw.value = encodeSHA1(form.temp_loginPw);
+	form.loginPw.value = encodeSHA1(form.temp_loginPw.value);
 	
 	form.submit();
 	
