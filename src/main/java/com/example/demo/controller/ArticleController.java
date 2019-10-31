@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,14 +73,15 @@ public class ArticleController {
 	}
 
 	@RequestMapping("article/doAdd")
-	public String addOneArticle(Model model, @RequestParam Map<String, Object> param,
+	public String addOneArticle(Model model, @RequestParam Map<String, Object> param, HttpSession session,
 			@RequestParam(value = "addFiles") List<MultipartFile> files,
 			@RequestParam(value = "type", required = false) List<String> types,
 			@RequestParam(value = "type2", required = false) List<String> types2) {
 		String resultCode = "";
 		String redirectUrl = "";
 		Map<String, Object> rs = null;
-
+		
+		param.put("loginedMemberId", session.getAttribute("loginedMemberId"));
 		rs = articleService.addOneArticle(param);
 		resultCode = (String) rs.get("resultCode");
 		model.addAttribute("msg", rs.get("msg"));
@@ -109,7 +111,8 @@ public class ArticleController {
 	}
 
 	@RequestMapping("article/deleteOneArticle")
-	public String deleteOneArticle(Model model, @RequestParam Map<String, Object> param) {
+	public String deleteOneArticle(Model model, @RequestParam Map<String, Object> param, HttpSession session) {
+		param.put("loginedMemberId", session.getAttribute("loginedMemberId"));
 		Map<String, Object> rs = articleFileService.deleteOneArticleAllFiles(param);
 
 		String resultCode = (String) rs.get("resultCode");
@@ -144,7 +147,16 @@ public class ArticleController {
 	}
 
 	@RequestMapping("article/modifyArticle")
-	public String showModify(Model model, @RequestParam Map<String, Object> param) {
+	public String showModify(Model model, @RequestParam Map<String, Object> param, HttpSession session) {
+		param.put("loginedMemberId", session.getAttribute("loginedMemberId"));
+		
+		if(!articleService.checkArticleAuthentication(param)) {
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("historyBack", true);
+			
+			return "common/redirect";
+		}
+		
 		Article article = articleService.getOneArticleById(param);
 		List<ArticleFile> files = articleFileService.getArticleFiles(param);
 
@@ -155,7 +167,7 @@ public class ArticleController {
 	}
 
 	@RequestMapping("article/doModifyArticle")
-	public String doModfiyArticle(Model model, @RequestParam Map<String, Object> param,
+	public String doModfiyArticle(Model model, HttpSession session,@RequestParam Map<String, Object> param,
 			@RequestParam(value = "modifyFile") List<MultipartFile> modifyFiles,
 			@RequestParam(value = "modifyFileId", required = false) List<Integer> fileIds,
 			@RequestParam(value = "modifyType2", required = false) List<String> modifyTypes2,
@@ -163,16 +175,34 @@ public class ArticleController {
 			@RequestParam(value = "addFiles") List<MultipartFile> files,
 			@RequestParam(value = "type", required = false) List<String> types,
 			@RequestParam(value = "type2", required = false) List<String> types2) {
+		param.put("loginedMemberId", session.getAttribute("loginedMemberId"));
 		Map<String, Object> rs = null;
 		String resultCode = null;
-
+		
+		rs = articleService.modifyArticle(param);
+		
+		model.addAttribute("msg", rs.get("msg"));
+		resultCode = (String) rs.get("resultCode");
+		
+		if(resultCode.startsWith("S-")) {
+			String redirectUrl = "/article/detail?id="+param.get("id")+"&boardId="+param.get("boardId");
+			model.addAttribute("redirectUrl", redirectUrl);
+		} else {
+			model.addAttribute("historyBack", true);
+			
+			return "common/redirect";
+		}
+		
+		
+		
+		
+		
 		if (deleteFileIds != null && deleteFileIds.size() > 0) {
 			rs = articleFileService.deleteArticleFiles(param, deleteFileIds);
-
-			model.addAttribute("msg", rs.get("msg"));
 			resultCode = (String) rs.get("resultCode");
 
 			if (!resultCode.startsWith("S-")) {
+				model.addAttribute("msg", rs.get("msg"));
 				model.addAttribute("historyBack", true);
 
 				return "common/redirect";
@@ -182,12 +212,10 @@ public class ArticleController {
 		if (fileIds != null && fileIds.size() > 0) {
 
 			rs = articleFileService.modifyArticleFiles(param, modifyFiles, fileIds, modifyTypes2);
-
-			model.addAttribute("msg", rs.get("msg"));
 			resultCode = (String) rs.get("resultCode");
 
 			if (!resultCode.startsWith("S-")) {
-
+				model.addAttribute("msg", rs.get("msg"));
 				model.addAttribute("historyBack", true);
 
 				return "common/redirect";
@@ -196,28 +224,17 @@ public class ArticleController {
 
 		if (files != null && files.size() > 0) {
 			rs = articleFileService.addArticleFiles(param, files, types, types2);
-			model.addAttribute("msg", rs.get("msg"));
 			resultCode = (String) rs.get("resultCode");
 
 			if (!resultCode.startsWith("S-")) {
+				model.addAttribute("msg", rs.get("msg"));
 				model.addAttribute("historyBack", true);
 
 				return "common/redirect";
 			}
 		}
 
-		rs = articleService.modifyArticle(param);
-
-		model.addAttribute("msg", rs.get("msg"));
-		resultCode = (String) rs.get("resultCode");
-
-		if (resultCode.startsWith("S-")) {
-			String redirectUrl = "/article/detail?id=" + param.get("id") + "&boardId=" + param.get("boardId");
-
-			model.addAttribute("redirectUrl", redirectUrl);
-		} else {
-			model.addAttribute("historyBack", true);
-		}
+		
 
 		return "common/redirect";
 	}

@@ -36,7 +36,7 @@
 		title = #{title},
 		body = #{body},
 		boardId = #{boardId},
-		memberId = 1,
+		memberId = #{loginedMemberId},
 		viewId = 1
 	</insert>
 

@@ -6,8 +6,11 @@
 <h1>${title}</h1>
 
 <a href="/article/list${url}&cPage=${param.cPage}">목록으로</a>
-<a href="javascript:deleteArticleCheck(${article.id }, ${param.boardId })">삭제하기</a>
-<a href="javascript:modifyArticleCheck(${article.id }, ${param.boardId })">수정하기</a>
+<c:if test="${isLogined && loginedMemberId == article.memberId }">
+	<a href="javascript:deleteArticleCheck(${article.id }, ${param.boardId })">삭제하기</a>
+	<a href="javascript:modifyArticleCheck(${article.id }, ${param.boardId })">수정하기</a>
+</c:if>
+
 <table border=1>
 	<tr>
 		<th>번호</th>

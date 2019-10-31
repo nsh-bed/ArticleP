@@ -102,9 +102,17 @@ public class ArticleServiceImpl implements ArticleService {
 		String resultCode = "";
 		
 		try {
-			articleDao.modifyArticle(param);
-			msg = "게시물 수정 성공";
-			resultCode = "S-1";
+			
+			if(!checkArticleAuthentication(param)) {
+				msg = "권한이 없습니다.";
+				resultCode = "F-1";
+					
+			} else {
+				articleDao.modifyArticle(param);
+				msg = "게시물을 수정했습니다.";
+				resultCode = "S-1";
+			}
+			
 		} catch(Exception e) {
 			msg = "게시물 수정 실패";
 			resultCode = "F-1";
@@ -112,5 +120,19 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		
 		return Maps.of("msg", msg, "resultCode", resultCode);
+	}
+	
+	public boolean checkArticleAuthentication(Map<String, Object> param) {
+		Article article = articleDao.getOneArticleById(param);
+		int loginedMemberId = (int)param.get("id");
+		
+		if(article.getMemberId() != loginedMemberId) {
+			
+			return false;
+		} else {
+			
+			return true;
+		}
+		
 	}
 }

@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.dao.ArticleDao;
 import com.example.demo.dao.ArticleFileDao;
+import com.example.demo.dto.Article;
 import com.example.demo.dto.ArticleFile;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ArticleFileServiceImpl implements ArticleFileService {
 	@Autowired
 	private ArticleFileDao articleFileDao;
+	@Autowired
+	private ArticleDao articleDao;
 	@Value("${custom.uploadDir}")
 	private String uploadDir;
 
@@ -46,13 +50,35 @@ public class ArticleFileServiceImpl implements ArticleFileService {
 		}
 		return Maps.of("msg", msg, "resultCode", resultCode);
 	}
-
+	
+	public boolean checkArticleAuthentication(Map<String, Object> param) {
+		Article article = articleDao.getOneArticleById(param);
+		int loginedMemberId = (int)param.get("id");
+		
+		if(article.getMemberId() != loginedMemberId) {
+			
+			return false;
+		} else {
+			
+			return true;
+		}
+		
+	}
+	
 	public Map<String, Object> deleteOneArticleAllFiles(Map<String, Object> param) {
 		String msg = "";
 		String resultCode = "";
 		try {
-			deleteArticleFiles(articleFileDao.getArticleAllFiles(param));
-			resultCode = "S-1";
+			
+			if(!checkArticleAuthentication(param)) {
+				msg = "권한이 없습니다.";
+				resultCode = "F-1";
+			} else {
+				deleteArticleFiles(articleFileDao.getArticleAllFiles(param));
+				resultCode = "S-1";
+			}
+			
+			
 		} catch (Exception e) {
 			msg = "파일 삭제 중 오류";
 			resultCode = "F-1";
