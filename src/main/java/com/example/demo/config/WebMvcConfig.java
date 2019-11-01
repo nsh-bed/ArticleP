@@ -32,7 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				.excludePathPatterns("/article/list", "/article/detail", "/article/showImg", "/article/downloadImg")
 				.excludePathPatterns("/member/login", "/member/doLogin", "/member/auth", "/member/emailCheck",
 						"/member/loginIdCheck")
-				.excludePathPatterns("/member/join", "/member/doJoin");
+				.excludePathPatterns("/member/join", "/member/doJoin", "/member/findLoginId", "/member/doFindLoginId", "/member/findLoginPw", "/member/doFindLoginPw");
 
 		registry.addInterceptor(needLogoutInterceptor).addPathPatterns("/member/login", "/member/doLogin",
 				"/member/join", "/member/doJoin", "/member/emailCheck", "/member/loginIdCheck");

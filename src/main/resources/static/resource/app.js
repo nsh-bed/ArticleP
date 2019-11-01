@@ -190,6 +190,13 @@ function MemberJoin__loginIdCheck(btn) {
 			"json"
 		);
 }
+
+function MemberMyPage__withdrawal() {
+	if(confirm("정말 탈퇴하시겠습니까?")) {
+		alert('회원 탈퇴 되었습니다.')
+		location.href = "/member/withdrawal";
+	}
+}
 	
 function MemberJoin__emailCheck(btn){
 	$(btn).prev().find("input").val($(btn).prev().find("input").val().trim());
@@ -240,4 +247,53 @@ function MemberLogin__checkForm(form) {
 	
 	form.submit();
 	
+}
+
+function MemberFindLoginId__checkForm(form) {
+	if(!checkEmpty(form.name) || !checkEmpty(form.email)) {
+		alert("빈칸을 채워주세요");
+		
+		return ;
+	}
+	
+	$(form).find("button").attr("disabled", true);
+	$("div").html("<h1>찾는중...</h1>");
+	$.get("/member/doFindLoginId", 
+		{
+			name : form.name.value.trim(),
+			email : form.email.value.trim()
+		},
+		function(data) {
+			if(data.success) {
+				$("div").html("<h2>아이디</h2>" + data.msg);
+			} else {
+				$("div").html("");
+				alert(data.msg);
+			}
+			
+			$(form).find("button").attr("disabled", false);
+		}
+	)
+}
+
+function MemberFindLoginPw__checkForm(form) {
+	if(!checkEmpty(form.loginId) || !checkEmpty(form.email)) {
+		alert("빈칸을 채워주세요");
+		
+		return ;
+	}
+	
+	$(form).find("button").attr("disabled", true);
+	$("div").html("<h1>찾는중...</h1>");
+	$.get("/member/doFindLoginPw", 
+		{
+			loginId : form.loginId.value.trim(),
+			email : form.email.value.trim()
+		},
+		function(data) {
+			alert(data.msg);
+			$("div").html("");
+			$(form).find("button").attr("disabled", false);
+		}
+	)
 }

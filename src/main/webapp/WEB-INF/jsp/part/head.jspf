@@ -44,6 +44,7 @@
 	<c:choose>
 		<c:when test="${loginedMember != null}">
 			<a href="/member/logout">로그아웃</a>
+			<a href="/member/myPage">마이페이지</a>
 		</c:when>
 		<c:otherwise>
 			<a href="/member/login">로그인</a>

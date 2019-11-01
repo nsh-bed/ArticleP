@@ -119,4 +119,61 @@ public class MemberController {
 
 		return "redirect:/";
 	}
+	
+	@RequestMapping("member/myPage")
+	public String myPage() {
+	
+		return "member/myPage";
+	}
+	
+	@RequestMapping("member/withdrawal")
+	public String withdrawal(HttpSession session, Model model) {
+		Map<String, Object> rs = memberService.memberWithdrawal((int) session.getAttribute("loginedMemberId"));
+		
+		model.addAttribute("msg", rs.get("msg"));
+		String resultCode = (String) rs.get("resultCode");
+		
+		if(resultCode.startsWith("S-")) {
+			session.removeAttribute("loginedMemberId");
+			String redirectUrl = "/";
+			model.addAttribute("redirectUrl", redirectUrl);
+		} else {
+			model.addAttribute("historyBack", true);
+		}
+		
+		return "common/redirect";
+	}
+	
+	@RequestMapping("member/findLoginId")
+	public String findLoginId() {
+	
+		return "member/findLoginId";
+	}
+	
+	@RequestMapping("member/doFindLoginId")
+	@ResponseBody
+	public Map<String, Object> doFindLoginId(@RequestParam Map<String, Object> param) {
+		Map<String, Object> rs = memberService.findLoginId(param);
+		if(rs.get("msg") == null) {
+			
+			return Maps.of("msg", "일치하는 정보가 없습니다.", "success", false);
+		} else {
+			
+			return Maps.of("msg", rs.get("msg"), "success", true);
+		}
+	}
+ 	
+	@RequestMapping("member/findLoginPw")
+	public String findLoginPw() {
+	
+		return "member/findLoginPw";
+	}
+	
+	@RequestMapping("member/doFindLoginPw")
+	@ResponseBody
+	public Map<String, Object> doFindLoginPw(@RequestParam Map<String, Object> param, HttpSession session) {
+		Map<String, Object> rs = memberService.findLoginPw(param);
+		
+		return Maps.of("msg", rs.get("msg"));
+	}
 }
