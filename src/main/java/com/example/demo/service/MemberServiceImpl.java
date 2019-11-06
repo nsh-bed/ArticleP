@@ -140,7 +140,7 @@ public class MemberServiceImpl implements MemberService {
 		Member member = null;
 		
 		try {
-			member = memberDao.getOneMemberByIdAndPw(param);
+			member = memberDao.getOneMemberByLoginIdAndPw(param);
 			if(member == null) {
 				msg = "존재하지 않는 회원정보입니다.";
 				resultCode = "F-1";
@@ -214,5 +214,22 @@ public class MemberServiceImpl implements MemberService {
 		}
 		
 		return Maps.of("msg", msg);
+	}
+	
+	public Map<String, Object> changeLoginPw(Map<String, Object> param) {
+		Member member = memberDao.getOneMemberByIdAndPw(param);
+		String msg = "";
+		String resultCode = "";
+		
+		if(member != null) {
+			memberDao.changeLoginPw(param);
+			msg = "비밀번호가 변경되었습니다.";
+			resultCode = "S-1";
+		} else {
+			msg = "비밀번호가 일치하지 않습니다.";
+			resultCode = "F-1";
+		}
+		
+		return Maps.of("msg", msg, "resultCode", resultCode);
 	}
 }

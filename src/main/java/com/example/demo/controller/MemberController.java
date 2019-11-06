@@ -176,4 +176,27 @@ public class MemberController {
 		
 		return Maps.of("msg", rs.get("msg"));
 	}
+	
+	@RequestMapping("member/changeLoginPw")
+	public String changeLoginPw() {
+		
+		return "member/changeLoginPw";
+	}
+	
+	@RequestMapping("member/doChangeLoginPw")
+	public String doCchangeLoginPw(Model model, @RequestParam Map<String, Object> param, HttpSession session) {
+		param.put("loginedMemberId", session.getAttribute("loginedMemberId"));
+		Map<String, Object> rs = memberService.changeLoginPw(param); 
+		model.addAttribute("msg", rs.get("msg"));
+		String resultCode = (String) rs.get("resultCode");
+		
+		if(resultCode.startsWith("S-")) {
+			String redirectUrl = "/member/myPage";
+			model.addAttribute("redirectUrl", redirectUrl);
+		} else {
+			model.addAttribute("historyBack", true);
+		}
+		
+		return "common/redirect";
+	}
 }

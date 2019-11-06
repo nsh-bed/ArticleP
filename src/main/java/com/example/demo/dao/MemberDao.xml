@@ -36,7 +36,7 @@
 		WHERE email = #{email} AND authKey = #{authKey}
 	</update>
 	
-	<select id="getOneMemberByIdAndPw" parameterType="map" resultMap="member">
+	<select id="getOneMemberByLoginIdAndPw" parameterType="map" resultMap="member">
 		SELECT *
 		FROM `member`
 		WHERE loginId = #{loginId} AND loginPw = #{loginPw}
@@ -68,6 +68,18 @@
 		SET loginPw = #{tempPw}
 		WHERE loginId = #{loginId} AND email = #{email}
 	</update>
+	
+	<update id="changeLoginPw" parameterType="map">
+		UPDATE `member`
+		SET loginPw = #{loginPw}
+		WHERE id = #{loginedMemberId} AND loginPw = #{origin_loginPw}
+	</update>
+	
+	<select id="getOneMemberByIdAndPw" parameterType="map" resultType="member">
+		SELECT *
+		FROM `member`
+		WHERE id = #{loginedMemberId} AND loginPw = #{origin_loginPw}
+	</select>
 	
 	<resultMap type="com.example.demo.dto.Member" id="member">
 		<id property="id" column="id" />

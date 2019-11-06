@@ -8,7 +8,7 @@ function checkEmpty(input) {
 }
 
 function encodeSHA1(value){
-	var hash = CryptoJS.SHA1(value);
+	var hash = CryptoJS.SHA1(value.trim());
 	var result = CryptoJS.enc.Hex.stringify(hash);
 	
 	return result;
@@ -296,4 +296,16 @@ function MemberFindLoginPw__checkForm(form) {
 			$(form).find("button").attr("disabled", false);
 		}
 	)
+}
+
+function MemberChangeLoginPw__checkForm(form) {
+	if(!checkEmpty(form.temp_origin_loginPw) || !checkEmpty(form.temp_loginPw)) {
+		alert("빈칸을 채워주세요.");
+		return ;
+	}
+	
+	form.origin_loginPw.value = encodeSHA1(form.temp_origin_loginPw.value);
+	form.loginPw.value = encodeSHA1(form.temp_loginPw.value);
+	
+	form.submit();
 }
