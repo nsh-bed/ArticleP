@@ -68,7 +68,6 @@ public class MemberController {
 		Map<String, Object> rs = memberService.checkLoginId(param);
 
 		String resultCode = (String) rs.get("resultCode");
-
 		if (resultCode.startsWith("S-")) {
 			return Maps.of("msg", rs.get("msg"), "success", true);
 		} else {
@@ -97,8 +96,9 @@ public class MemberController {
 		Map<String, Object> rs = memberService.checkMember(param);
 
 		model.addAttribute("msg", rs.get("msg"));
-		String resultCode = (String) rs.get("resultCode");
 
+		String resultCode = (String) rs.get("resultCode");
+		
 		if (resultCode.startsWith("S-")) {
 
 			String redirectUrl = "/";

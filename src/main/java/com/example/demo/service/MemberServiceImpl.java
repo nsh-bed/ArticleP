@@ -141,6 +141,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		try {
 			member = memberDao.getOneMemberByLoginIdAndPw(param);
+			Log.info("A2: member = " + member);
 			if(member == null) {
 				msg = "존재하지 않는 회원정보입니다.";
 				resultCode = "F-1";

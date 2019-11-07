@@ -43,6 +43,7 @@
 
 	<c:choose>
 		<c:when test="${loginedMember != null}">
+			<input type="hidden" id="memberId" value="${loginedMemberId }">
 			<a href="/member/logout">로그아웃</a>
 			<a href="/member/myPage">마이페이지</a>
 		</c:when>

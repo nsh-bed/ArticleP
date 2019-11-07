@@ -66,3 +66,13 @@ CREATE TABLE articleFile (
     `type2` CHAR(200) NOT NULL,
     PRIMARY KEY(id)
 );
+
+CREATE TABLE articleReply (
+    id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    articleId INT(10) UNSIGNED NOT NULL,
+    memberId INT(10) UNSIGNED NOT NULL,
+    `body` CHAR(10) NOT NULL,
+    boardId INT(10) UNSIGNED NOT NULL,    
+    PRIMARY KEY(id)
+);

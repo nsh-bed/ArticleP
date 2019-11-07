@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.groovy.util.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.dto.Article;
 import com.example.demo.dto.ArticleFile;
 import com.example.demo.service.ArticleFileService;
+import com.example.demo.service.ArticleReplyService;
 import com.example.demo.service.ArticleService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,8 @@ public class ArticleController {
 	private ArticleService articleService;
 	@Autowired
 	private ArticleFileService articleFileService;
+	@Autowired
+	private ArticleReplyService articleReplyService;
 	@Value("${custom.uploadDir}")
 	private String uploadDir;
 
@@ -299,4 +303,69 @@ public class ArticleController {
 		return new ResponseEntity<Resource>(rs, header, HttpStatus.OK);
 	}
 
-}
+	@RequestMapping("article/addReply")
+	@ResponseBody
+	public Map<String, Object> addReply(HttpSession session, @RequestParam Map<String, Object> param) {
+		
+		param.put("loginedMemberId", session.getAttribute("loginedMemberId"));
+		
+		Map<String, Object> rs = articleReplyService.addReply(param);
+		
+		boolean success = false;
+		String resultCode = (String) rs.get("resultCode");
+		
+		if(resultCode.startsWith("S-")) {
+			
+			success = true;
+		}
+		
+		return Maps.of("msg", rs.get("msg"), "success", success, "reply", rs.get("reply"));
+	}
+	
+	@RequestMapping("article/getOneArticleAllReplies")
+	@ResponseBody
+	public Map<String, Object> getOneArticleAllReplies(@RequestParam Map<String, Object> param) {
+		Map<String, Object> rs = articleReplyService.getOneArticleAllReplies(param);
+		
+		boolean success = false;
+		String resultCode = (String) rs.get("resultCode");
+		
+		if(resultCode.startsWith("S-")) {
+			success = true;
+		}
+		
+		return Maps.of("msg", rs.get("msg"), "replies", rs.get("replies"), "success", success);
+	}
+	
+	@RequestMapping("article/deleteOneArticleOneReply")
+	@ResponseBody
+	public Map<String, Object> deleteOneArticleOneReply(@RequestParam Map<String, Object> param, HttpSession session) {
+		param.put("loginedMemberId", session.getAttribute("loginedMemberId"));
+		Map<String, Object> rs = articleReplyService.deleteOneArticleOneReplyByIdArticleId(param);
+		
+		boolean success = false;
+		String resultCode = (String) rs.get("resultCode");
+		
+		if(resultCode.startsWith("S-")) {
+			success = true;
+		}
+		
+		return Maps.of("msg", rs.get("msg"), "success", success);
+	}
+	
+	@RequestMapping("article/modifyReply")
+	@ResponseBody
+	public Map<String, Object> modifyReply(@RequestParam Map<String, Object> param, HttpSession session) {
+		param.put("loginedMemberId", session.getAttribute("loginedMemberId"));
+		Map<String, Object> rs = articleReplyService.modifyReplyByIdArticleIdBoardId(param);
+		
+		boolean success = false;
+		String resultCode = (String) rs.get("resultCode");
+		
+		if(resultCode.startsWith("S-")) {
+			success = true;
+		}
+		
+		return Maps.of("msg", rs.get("msg"), "success", success, "reply", rs.get("reply"));
+	}
+ }

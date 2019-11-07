@@ -11,6 +11,9 @@
 	<a href="javascript:modifyArticleCheck(${article.id }, ${param.boardId })">수정하기</a>
 </c:if>
 
+<input type="hidden" id="articleId" value="${article.id }">
+<input type="hidden" id="boardId" value="${article.boardId }">
+
 <table border=1>
 	<tr>
 		<th>번호</th>
@@ -37,5 +40,27 @@
 	<img src="/article/showImg?id=${file.id}"><br>
 	<a href="/article/downloadImg?id=${file.id}">${file.originFileName }</a><br>
 </c:forEach>
+
+<h3>댓글</h3>
+<c:if test="${isLogined }">
+	<form id="replyAddForm" onsubmit="ArticleDetail__checkAddReplyForm(this); return false;">
+		<input type="hidden" name="articleId" value="${article.id }">
+		<input type="hidden" name="boardId" value="${article.boardId }">
+		댓글 : <textarea name="body"></textarea>
+		<button>작성</button>
+	</form>
+	
+	<form id="replyModifyForm" onsubmit="ArticleDetail__modifyReply(this); return false;" hidden>
+		<input type="hidden" name="id">
+		<input type="hidden" name="articleId" value="${article.id }">
+		<input type="hidden" name="boardId" value="${article.boardId }">
+		수정내용 : <textarea name="body"></textarea>
+		<button>수정</button>
+		<button type="button" onclick="ArticleDetail__hideReplyModifyForm(this); return false;">취소</button>
+	</form>
+</c:if>
+
+<hr>
+<div class="replyList"></div>
 
 <%@ include file="../part/foot.jspf"%>
